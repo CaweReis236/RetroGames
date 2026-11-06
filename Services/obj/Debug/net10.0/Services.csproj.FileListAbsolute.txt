@@ -1,0 +1,12 @@
+/home/2025.1.08.035/retrogames/Services/bin/Debug/net10.0/Services.deps.json
+/home/2025.1.08.035/retrogames/Services/bin/Debug/net10.0/Services.dll
+/home/2025.1.08.035/retrogames/Services/bin/Debug/net10.0/Services.pdb
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.GeneratedMSBuildEditorConfig.editorconfig
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.AssemblyInfoInputs.cache
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.AssemblyInfo.cs
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.csproj.CoreCompileInputs.cache
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.sourcelink.json
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.dll
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/refint/Services.dll
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/Services.pdb
+/home/2025.1.08.035/retrogames/Services/obj/Debug/net10.0/ref/Services.dll

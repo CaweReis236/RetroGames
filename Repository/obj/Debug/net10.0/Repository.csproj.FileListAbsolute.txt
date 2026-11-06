@@ -1,0 +1,12 @@
+/home/2025.1.08.035/retrogames/Repository/bin/Debug/net10.0/Repository.deps.json
+/home/2025.1.08.035/retrogames/Repository/bin/Debug/net10.0/Repository.dll
+/home/2025.1.08.035/retrogames/Repository/bin/Debug/net10.0/Repository.pdb
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.GeneratedMSBuildEditorConfig.editorconfig
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.AssemblyInfoInputs.cache
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.AssemblyInfo.cs
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.csproj.CoreCompileInputs.cache
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.sourcelink.json
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.dll
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/refint/Repository.dll
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/Repository.pdb
+/home/2025.1.08.035/retrogames/Repository/obj/Debug/net10.0/ref/Repository.dll
