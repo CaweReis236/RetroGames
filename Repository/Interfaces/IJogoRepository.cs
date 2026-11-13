@@ -1,11 +1,12 @@
 using RetroGames.Model.Model;
+using RetroGames.Repository.Filtros;
 
 namespace RetroGames.Repository.Interfaces;
 
 public interface IJogoRepository
 {
     // Lista todos os jogos.
-    Task<List<Jogo>> ListarAsync();
+    Task<(List<Jogo> Jogos, int Total)> ListarAsync(JogoFiltro filtro);
 
     // Busca um jogo pelo ID.
     Task<Jogo?> BuscarPorIdAsync(int id);

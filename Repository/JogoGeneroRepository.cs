@@ -120,4 +120,78 @@ public class JogoGeneroRepository : RepositoryBase, IJogoGeneroRepository
 
         return await comando.ExecuteNonQueryAsync();
     }
+
+
+// Lista todos os vínculos entre jogos e gêneros.
+public async Task<List<JogoGenero>> ListarTodosAsync()
+{
+    const string sql = """
+        SELECT co_jogo, co_genero
+        FROM tb_jogo_genero
+        ORDER BY co_jogo, co_genero
+        """;
+
+    await using var conexao = await CriarConexaoAbertaAsync();
+    await using var comando = CriarComando(conexao, sql);
+    await using var leitor = await comando.ExecuteReaderAsync();
+
+    var vinculos = new List<JogoGenero>();
+
+    while (await leitor.ReadAsync())
+    {
+        vinculos.Add(Converter(leitor));
+    }
+
+    return vinculos;
+}
+
+// Lista vínculos de vários jogos usando uma única consulta.
+public async Task<List<JogoGenero>> ListarPorJogosAsync(
+    List<int> idsJogos)
+{
+    ArgumentNullException.ThrowIfNull(idsJogos);
+
+    // Lista vazia: não consulta o banco.
+    if (idsJogos.Count == 0)
+    {
+        return new List<JogoGenero>();
+    }
+
+    var parametros = new List<string>();
+
+    for (int i = 0; i < idsJogos.Count; i++)
+    {
+        parametros.Add($"@id{i}");
+    }
+
+    string sql = $"""
+        SELECT co_jogo, co_genero
+        FROM tb_jogo_genero
+        WHERE co_jogo IN ({string.Join(", ", parametros)})
+        ORDER BY co_jogo, co_genero
+        """;
+
+    await using var conexao = await CriarConexaoAbertaAsync();
+    await using var comando = CriarComando(conexao, sql);
+
+    for (int i = 0; i < idsJogos.Count; i++)
+    {
+        AdicionarParametro(
+            comando,
+            $"@id{i}",
+            idsJogos[i]
+        );
+    }
+
+    await using var leitor = await comando.ExecuteReaderAsync();
+
+    var vinculos = new List<JogoGenero>();
+
+    while (await leitor.ReadAsync())
+    {
+        vinculos.Add(Converter(leitor));
+    }
+
+    return vinculos;
+}
 }

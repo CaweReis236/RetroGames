@@ -18,4 +18,8 @@ public interface IJogoGeneroRepository
 
     // Remove todos os gêneros associados a um jogo.
     Task<int> ExcluirPorJogoAsync(int idJogo);
+
+    Task<List<JogoGenero>> ListarTodosAsync();
+
+    Task<List<JogoGenero>> ListarPorJogosAsync(List<int> idsJogos);
 }
