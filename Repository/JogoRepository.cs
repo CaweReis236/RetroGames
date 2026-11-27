@@ -231,6 +231,36 @@ public class JogoRepository : RepositoryBase, IJogoRepository
         return null;
     }
 
+    // Bloqueia a linha até o fim da transação de compra.
+    public async Task<Jogo?> BuscarParaCompraAsync(int id)
+    {
+        await using var conexao = await CriarConexaoAbertaAsync();
+        await using var comando = CriarComando(conexao, "SELECT * FROM tb_jogo WHERE co_seq_jogo=@id FOR UPDATE");
+        AdicionarParametro(comando,"@id",id);
+        await using var leitor = await comando.ExecuteReaderAsync();
+        return await leitor.ReadAsync() ? Converter(leitor) : null;
+    }
+    public async Task<int> BaixarEstoqueAsync(int id, int quantidade)
+    {
+        await using var conexao = await CriarConexaoAbertaAsync();
+        await using var comando = CriarComando(conexao, "UPDATE tb_jogo SET qt_estoque=qt_estoque-@quantidade WHERE co_seq_jogo=@id AND st_ativo=TRUE AND qt_estoque>=@quantidade");
+        AdicionarParametro(comando,"@id",id);
+        AdicionarParametro(comando,"@quantidade",quantidade);
+        return await ExecutarGravacaoAsync(comando);
+    }
+    public async Task<List<Jogo>> ListarPorIdsAsync(List<int> ids)
+    {
+        if(ids.Count==0) return new();
+        await using var conexao = await CriarConexaoAbertaAsync();
+        await using var comando = CriarComando(conexao, "");
+        var parametros=ids.Select((id,i)=>{var p="@id"+i; AdicionarParametro(comando,p,id);return p;}).ToList();
+        comando.CommandText="SELECT * FROM tb_jogo WHERE co_seq_jogo IN ("+string.Join(",",parametros)+")";
+        var jogos=new List<Jogo>();
+        await using var leitor=await comando.ExecuteReaderAsync();
+        while(await leitor.ReadAsync()) jogos.Add(Converter(leitor));
+        return jogos;
+    }
+
     // Insere um jogo e retorna seu ID.
     public async Task<int> InserirAsync(Jogo jogo)
     {
