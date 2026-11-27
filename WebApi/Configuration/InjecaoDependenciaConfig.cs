@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using RetroGames.Model.Model;
+using RetroGames.WebApi.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 using RetroGames.Repository;
@@ -22,6 +25,7 @@ public static class InjecaoDependenciaConfig
         });
 
         // Repositórios: uma instância por escopo HTTP.
+        services.AddScoped<IUsuarioRepository, UsuarioRepository>();
         services.AddScoped<IPlataformaRepository, PlataformaRepository>();
 
         services.AddScoped<IJogoRepository, JogoRepository>();
@@ -41,6 +45,10 @@ public static class InjecaoDependenciaConfig
     public static IServiceCollection AddServicosDeNegocio(
         this IServiceCollection services)
     {
+        services.AddScoped<IAutenticacaoService, AutenticacaoService>();
+        services.AddScoped<IPasswordHasher<Usuario>, PasswordHasher<Usuario>>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUsuarioAtualService, UsuarioAtualService>();
         services.AddScoped<IPlataformaService, PlataformaService>();
 
         services.AddScoped<IJogoService, JogoService>();

@@ -5,6 +5,7 @@ namespace RetroGames.Repository;
 
 public class RepositorySet : IRepositorySet
 {
+    public IUsuarioRepository Usuario { get; }
     public IPlataformaRepository Plataforma { get; }
 
     public IJogoRepository Jogo { get; }
@@ -18,6 +19,7 @@ public class RepositorySet : IRepositorySet
     // Inicializa os cinco repositórios com a mesma configuração.
     public RepositorySet(RepositoryConfig config)
     {
+        Usuario = new UsuarioRepository(config);
         Plataforma = new PlataformaRepository(config);
 
         Jogo = new JogoRepository(config);

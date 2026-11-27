@@ -1,3 +1,4 @@
+using RetroGames.Services.Interfaces;
 using FluentValidation;
 using RetroGames.WebApi.Filters;
 using RetroGames.WebApi.Middlewares;
@@ -38,11 +39,18 @@ builder.Services.AddControllers(opcoes => opcoes.Filters.Add<FluentValidationFil
 
 // Gera a documentação OpenAPI.
 builder.Services.AddOpenApi();
+builder.Services.AddSessao();
+builder.Services.AddPoliticas();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+using (var escopo = app.Services.CreateScope())
+{
+    var autenticacao = escopo.ServiceProvider.GetRequiredService<IAutenticacaoService>();
+    await autenticacao.GarantirAdministradorInicialAsync(builder.Configuration["AdminInicial:Email"], builder.Configuration["AdminInicial:Senha"]);
+}
 
 app.UseExceptionHandler();
 
@@ -50,7 +58,7 @@ app.UseExceptionHandler();
 if (app.Environment.IsDevelopment())
 {
     // Documento OpenAPI em /openapi/v1.json.
-    app.MapOpenApi();
+    app.MapOpenApi().AllowAnonymous();
 
     // Interface Swagger em /swagger.
     app.UseSwaggerUI(options =>
@@ -64,6 +72,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Mapeia as rotas dos controllers.

@@ -12,9 +12,12 @@ public class JogoService : IJogoService
 {
     private readonly IRepositorySet _repositorio;
 
-    public JogoService(IRepositorySet repositorio)
+    private readonly IUsuarioAtualService _usuarioAtual;
+
+    public JogoService(IRepositorySet repositorio, IUsuarioAtualService usuarioAtual)
     {
         _repositorio = repositorio;
+        _usuarioAtual = usuarioAtual;
     }
 
     // Monta os detalhes de vários jogos sem realizar
@@ -77,7 +80,7 @@ public class JogoService : IJogoService
             int tamanhoPagina,
             string? nome = null,
             int? idPlataforma = null,
-            int? idGenero = null)
+            int? idGenero = null, bool incluirInativos = false)
     {
         List<int>? idsJogos = null;
 
@@ -100,7 +103,8 @@ public class JogoService : IJogoService
             TamanhoPagina = tamanhoPagina,
             Nome = nome,
             IdPlataforma = idPlataforma,
-            IdsJogos = idsJogos
+            IdsJogos = idsJogos,
+            IncluirInativos = incluirInativos && _usuarioAtual.EhAdministrador
 
             // IncluirInativos permanece false por padrão.
         };
@@ -117,7 +121,7 @@ public class JogoService : IJogoService
     {
         var jogo = await _repositorio.Jogo.BuscarPorIdAsync(id);
 
-        if (jogo == null || !jogo.Ativo)
+        if (jogo == null || (!jogo.Ativo && !_usuarioAtual.EhAdministrador))
         {
             throw new BusinessRuleException(
                 BusinessErrors.JOGO_NAO_ENCONTRADO
@@ -184,7 +188,7 @@ public class JogoService : IJogoService
 
         jogo.Nome = jogo.Nome.Trim();
         jogo.Ativo = true;
-        jogo.DataCadastro = DateTime.Now;
+        jogo.DataCadastro = DateTime.UtcNow;
 
         idsGeneros = idsGeneros.Distinct().ToList();
 
@@ -217,7 +221,7 @@ public class JogoService : IJogoService
             transactionScope.Complete();
         }
 
-        return await BuscarPorIdAsync(jogo.Id);
+        return (await MontarDetalhesAsync(new List<Jogo> { jogo })).Single();
     }
 
     // Altera um jogo e substitui seus vínculos de gêneros.
@@ -231,7 +235,7 @@ public class JogoService : IJogoService
         var existente = await _repositorio.Jogo
             .BuscarPorIdAsync(jogo.Id);
 
-        if (existente == null || !existente.Ativo)
+        if (existente == null)
         {
             throw new BusinessRuleException(
                 BusinessErrors.JOGO_NAO_ENCONTRADO
@@ -242,7 +246,7 @@ public class JogoService : IJogoService
 
         // Preserva os campos que não devem ser redefinidos.
         jogo.DataCadastro = existente.DataCadastro;
-        jogo.Ativo = existente.Ativo;
+        // O administrador pode reativar ou desativar o jogo.
 
         idsGeneros = idsGeneros.Distinct().ToList();
 
