@@ -12,6 +12,7 @@ export default function AutenticacaoProvider({children}) {
     return () => {abort.abort(); window.removeEventListener('sessao:expirada', expirar)}
   }, [])
   async function entrar(credenciais) { const u = await autenticacaoApi.entrar(credenciais); setUsuario(u); return u }
+  async function cadastrar(modelo) { const u = await autenticacaoApi.cadastrar(modelo); setUsuario(u); return u }
   async function sair() { await autenticacaoApi.sair(); setUsuario(null) }
-  return <autenticacaoContext.Provider value={{usuario, carregando, estaAutenticado:!!usuario, ehAdministrador:usuario?.perfil === 'Administrador', entrar, sair}}>{children}</autenticacaoContext.Provider>
+  return <autenticacaoContext.Provider value={{usuario, carregando, estaAutenticado:!!usuario, ehAdministrador:usuario?.perfil === 'Administrador', entrar, cadastrar, sair}}>{children}</autenticacaoContext.Provider>
 }

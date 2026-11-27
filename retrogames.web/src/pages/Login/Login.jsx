@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import useAutenticacao from '../../hooks/useAutenticacao.js'
 import { obterMensagemErro } from '../../api/erros.js'
 export default function Login() {
@@ -19,5 +19,5 @@ export default function Login() {
     {erro && <div className="alert alert-danger" role="alert">{erro}</div>}
     <form onSubmit={enviar}><label htmlFor="email" className="form-label">E-mail</label><input id="email" type="email" autoComplete="username" className="form-control mb-3" required value={email} onChange={e=>setEmail(e.target.value)}/>
     <label htmlFor="senha" className="form-label">Senha</label><input id="senha" type="password" autoComplete="current-password" className="form-control mb-3" required value={senha} onChange={e=>setSenha(e.target.value)}/>
-    <button className="btn btn-primary" disabled={enviando}>{enviando?'Entrando...':'Entrar'}</button></form></section>
+    <button className="btn btn-primary" disabled={enviando}>{enviando?'Entrando...':'Entrar'}</button></form><p className="mt-3 mb-0">Ainda não tem conta? <Link to={'/cadastro?'+params.toString()}>Cadastre-se</Link>.</p></section>
 }

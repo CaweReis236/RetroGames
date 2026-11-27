@@ -4,4 +4,4 @@ export const jogoApi = { listar: (params, signal) => dados(api.get('/Jogo', { pa
 export const plataformaApi = { listar: () => dados(api.get('/Plataforma')), inserir: modelo => dados(api.post('/Plataforma',modelo)), alterar: (id,modelo) => dados(api.put('/Plataforma/'+id,modelo)), excluir: id => dados(api.delete('/Plataforma/'+id)) }
 export const generoApi = { listar: () => dados(api.get('/Genero')) }
 export const condicaoJogoApi = { listar: () => dados(api.get('/CondicaoJogo')) }
-export const autenticacaoApi = { entrar: (dadosLogin) => dados(api.post('/Autenticacao/login', dadosLogin)), sair: () => dados(api.post('/Autenticacao/logout')), usuarioAtual: (signal) => dados(api.get('/Autenticacao/eu', {signal})) }
+export const autenticacaoApi = { cadastrar: modelo => dados(api.post('/Autenticacao/cadastrar',modelo)), entrar: (dadosLogin) => dados(api.post('/Autenticacao/login', dadosLogin)), sair: () => dados(api.post('/Autenticacao/logout')), usuarioAtual: (signal) => dados(api.get('/Autenticacao/eu', {signal})) }
