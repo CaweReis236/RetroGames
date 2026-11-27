@@ -5,3 +5,5 @@ export const plataformaApi = { listar: () => dados(api.get('/Plataforma')), inse
 export const generoApi = { listar: () => dados(api.get('/Genero')) }
 export const condicaoJogoApi = { listar: () => dados(api.get('/CondicaoJogo')) }
 export const autenticacaoApi = { cadastrar: modelo => dados(api.post('/Autenticacao/cadastrar',modelo)), entrar: (dadosLogin) => dados(api.post('/Autenticacao/login', dadosLogin)), sair: () => dados(api.post('/Autenticacao/logout')), usuarioAtual: (signal) => dados(api.get('/Autenticacao/eu', {signal})) }
+
+export const pedidoApi = { finalizar: itens => dados(api.post('/Pedido',{itens})), meus: signal => dados(api.get('/Pedido/meus',{signal})) }
