@@ -125,8 +125,8 @@ public class PedidoServiceTests
         PrepararJogo(1);
         _jogos.Setup(r=>r.BaixarEstoqueAsync(1,1)).ReturnsAsync(0);
         TransactionStatus? estado=null;
-        _pedidos.Setup(r=>r.InserirAsync(It.IsAny<Pedido>())).Callback<Pedido>(_=>{
-            Transaction.Current!.TransactionCompleted += (_,e)=>estado=e.Transaction!.TransactionInformation.Status;
+        _pedidos.Setup(r=>r.InserirAsync(It.IsAny<Pedido>())).Callback<Pedido>(pedido=>{
+            Transaction.Current!.TransactionCompleted += (remetente,e)=>estado=e.Transaction!.TransactionInformation.Status;
         }).ReturnsAsync(42);
         var service=CriarService();
 
