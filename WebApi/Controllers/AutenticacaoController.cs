@@ -21,6 +21,15 @@ public class AutenticacaoController(IAutenticacaoService service) : ControllerBa
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         return Ok(RetroGamesResponseApiModel<UsuarioLogadoResponseApiModel>.Sucesso(ParaResponse(principal)));
     }
+    [AllowAnonymous]
+    [HttpPost("cadastrar")]
+    public async Task<IActionResult> Cadastrar(CadastroRequestApiModel request)
+    {
+        var usuario = await service.CadastrarAsync(request.Nome, request.Email, request.Senha);
+        var principal = usuario.CriarPrincipal();
+        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+        return StatusCode(201, RetroGamesResponseApiModel<UsuarioLogadoResponseApiModel>.Sucesso(ParaResponse(principal)));
+    }
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
