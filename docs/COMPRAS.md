@@ -9,6 +9,17 @@ As tabelas tb_situacao_pedido, tb_pedido e tb_item_pedido já fazem parte de dat
 
 PedidoRepository, ItemPedidoRepository e SituacaoPedidoRepository leem uma tabela por consulta, com parâmetros. PedidoService combina dados com LINQ, define o preço e total, usa UTC e engloba pedido, itens e estoque em TransactionScope. A leitura do jogo durante a compra usa FOR UPDATE e a baixa é condicional ao estoque e ao jogo ativo. Nenhum preço vindo do cliente é aceito como fonte de verdade.
 
+## Preparação e auditoria automáticas (sem Workbench)
+
+Na raiz do repositório, com o .env local e conexão com o banco configurados:
+
+```bash
+dotnet run --project tools/BancoCompras -- preparar
+dotnet run --project tools/BancoCompras -- verificar
+```
+
+A primeira operação verifica as tabelas e semeia apenas situações ausentes, com transação e sem sobrescrever dados. A segunda é somente leitura, mostra situações, contagem de pedidos/itens e estoque. A ferramenta aborta se o esquema necessário estiver ausente ou não for transacional. Os scripts SQL permanecem como referência. A ferramenta é separada da API e não expõe credenciais.
+
 ## Endpoints, aceite e rastreabilidade
 
 | História | Rota / tela | Critérios de aceite e erros | Código / testes |
