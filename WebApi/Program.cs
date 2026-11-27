@@ -1,3 +1,5 @@
+using FluentValidation;
+using RetroGames.WebApi.Filters;
 using RetroGames.WebApi.Middlewares;
 using RetroGames.WebApi.Configuration;
 
@@ -28,7 +30,11 @@ builder.Services.AddRepositorios(connectionString);
 builder.Services.AddServicosDeNegocio();
 
 // Registra os controllers.
-builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddControllers(opcoes => opcoes.Filters.Add<FluentValidationFilter>())
+    .ConfigureApiBehaviorOptions(opcoes => opcoes.InvalidModelStateResponseFactory = contexto =>
+        FluentValidationFilter.ModeloInvalido(contexto.ModelState.Where(x => x.Value!.Errors.Count > 0)
+            .ToDictionary(x => System.Text.Json.JsonNamingPolicy.CamelCase.ConvertName(x.Key), x => x.Value!.Errors.Select(e => string.IsNullOrEmpty(e.ErrorMessage) ? "Valor inválido." : e.ErrorMessage).ToArray())));
 
 // Gera a documentação OpenAPI.
 builder.Services.AddOpenApi();
