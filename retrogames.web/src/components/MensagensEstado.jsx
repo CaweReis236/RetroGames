@@ -1,0 +1,3 @@
+export function Carregando() { return <div className="p-4" role="status"><span className="spinner-border spinner-border-sm me-2" aria-hidden="true" />Carregando...</div> }
+export function MensagemErro({ mensagem, tentarNovamente }) { return <div className="alert alert-danger" role="alert">{mensagem}{tentarNovamente && <div className="mt-2"><button className="btn btn-outline-danger" onClick={tentarNovamente}>Tentar novamente</button></div>}</div> }
+export function EstadoVazio({ mensagem = 'Nenhum jogo encontrado. Experimente mudar os filtros.' }) { return <div className="alert alert-secondary">{mensagem}</div> }

@@ -10,7 +10,8 @@ public interface IJogoService
         int tamanhoPagina,
         string? nome = null,
         int? idPlataforma = null,
-        int? idGenero = null
+        int? idGenero = null,
+        bool incluirInativos = false
     );
 
     Task<JogoDetalheServiceModel> BuscarPorIdAsync(int id);
