@@ -60,8 +60,33 @@ internal static class TestesIntegracao
         await Chamar(visitante, "Pedido/meus", 401, 4);
         await Chamar(visitante, "Pedido", 401, 4, vazio);
 
-        Console.Write("E-mail da conta CLIENTE que fez a compra anterior: ");
-        var email = Console.ReadLine()?.Trim() ?? "";
+        // Recupera somente clientes com pedidos, sem ler hashes ou outras credenciais.
+        var compradores = new List<int>();
+        await using (var cmd = new MySqlCommand("SELECT DISTINCT co_usuario FROM tb_pedido ORDER BY co_usuario", conexao))
+        await using (var leitor = await cmd.ExecuteReaderAsync())
+            while (await leitor.ReadAsync()) compradores.Add(leitor.GetInt32(0));
+        var contas = new List<(string Nome, string Email)>();
+        foreach (var id in compradores)
+        {
+            await using var cmd = new MySqlCommand("SELECT no_usuario,ds_email FROM tb_usuario WHERE co_seq_usuario=@id AND co_perfil=2 AND st_ativo=1", conexao);
+            cmd.Parameters.AddWithValue("@id", id);
+            await using var leitor = await cmd.ExecuteReaderAsync();
+            if (await leitor.ReadAsync()) contas.Add((leitor.GetString(0), leitor.GetString(1)));
+        }
+        if (contas.Count == 0)
+            throw new InvalidOperationException("Nenhum cliente ativo com pedido encontrado.");
+        var indice = 0;
+        if (contas.Count > 1)
+        {
+            for (int n = 0; n < contas.Count; n++)
+                Console.WriteLine($"{n + 1} - {contas[n].Nome} ({contas[n].Email})");
+            Console.Write("Número da conta: ");
+            if (!int.TryParse(Console.ReadLine(), out var escolha) || escolha < 1 || escolha > contas.Count)
+                throw new InvalidOperationException("Seleção inválida.");
+            indice = escolha - 1;
+        }
+        var email = contas[indice].Email;
+        Console.WriteLine($"Conta identificada: {contas[indice].Nome} ({email})");
         Console.Write("Senha dessa conta (oculta): ");
         var senha = LerSenha();
         var usuario = await Chamar(primeiro, "Autenticacao/login", 200, 0, new { email, senha });
