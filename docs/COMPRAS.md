@@ -32,11 +32,11 @@ A primeira operação verifica as tabelas e semeia apenas situações ausentes, 
 
 Senhas e sessão não são armazenadas no localStorage; apenas o carrinho. A API continua protegida por cookie HttpOnly/SameSite Strict e autorização. Cadastro usa senha de 8–128 caracteres (decisão do projeto). O checkout não processa pagamentos reais.
 
-## Validação antes da entrega (a executar)
+## Roteiro de validação antes da entrega
 
 - dotnet test RetroGames.sln; dotnet build RetroGames.sln; npm run build.
 - Cadastro, duplicidade, login, persistência do carrinho no F5, quantidade, remoção e total.
-- Compra com dois jogos: conferir pedido, itens, preço do banco e baixa de estoque.
+- Compra válida: conferir pedido, itens, preço do banco e baixa de estoque (teste realizado com duas unidades de um jogo; compra válida com dois jogos distintos não registrada).
 - Compra com estoque insuficiente: comparar contagem de pedidos, itens e estoque antes/depois; nada deve mudar.
 - Segunda conta: não deve ver pedidos da primeira.
 - Testar visitante, cliente e administrador. Verificar 401/403 na API.
@@ -52,7 +52,7 @@ Senhas e sessão não são armazenadas no localStorage; apenas o carrinho. A API
 - RS05: .env local ignorado pelo Git; .env.example contém placeholders. Antes da entrega conferir arquivos versionados e histórico; não publicar a configuração real.
 - RS06: parâmetros SQL para valores de entrada, inclusive IDs e baixa de estoque. Os nomes de parâmetros de listas são gerados pelo código, não pelo cliente.
 
-A leitura do código foi realizada; a verificação dinâmica de autorização e isolamento deve ser executada no ambiente conectado. Verificar também npm audit; não executar npm audit fix --force sem avaliar impacto.
+A leitura do código e os testes dinâmicos de autorização e isolamento foram realizados. Em 28/11, npm audit e a auditoria NuGet não apontaram vulnerabilidades conhecidas após correção das dependências npm. Não executar npm audit fix --force sem avaliar impacto.
 
 ## Teste de integração automatizado
 
@@ -66,7 +66,7 @@ Não é necessário informar credenciais. A ferramenta exige que haja pelo menos
 
 ## Identidade visual e heurísticas para a demonstração
 
-A identidade usa azul-marinho, âmbar, cartuchos e logotipo vetorial autoral, sem capas comerciais. Layout responsivo em Bootstrap. Validar manualmente em 360 e 1366 px.
+A identidade usa azul-marinho, âmbar, cartuchos e logotipo vetorial autoral, sem capas comerciais. Layout responsivo em Bootstrap. Funcionamento desktop e mobile confirmado pelo estudante em 28/11; manter evidências das dimensões para a apresentação.
 
 | Heurística | Onde demonstrar |
 | --- | --- |
@@ -82,4 +82,19 @@ A identidade usa azul-marinho, âmbar, cartuchos e logotipo vetorial autoral, se
 
 Confirmado pelo estudante em 27/11: Aulas 8 e 9, 33 testes unitários, cadastro, carrinho persistente, compra de duas unidades de Vector Search e histórico. Banco conferido em 28/11: um pedido, um item e estoque 8 para Vector Search. Front-end anterior ao acabamento compilado em casa.
 
-Pendente de evidência: novo teste de integração, build após acabamento, revisão visual em ambas as larguras, auditoria de dependências e acesso do professor ao quadro. O merge só deve ocorrer após essas verificações. O percentual de progresso é estimativo, não substitui os critérios de aceite.
+Em 28/11/2026, após os ajustes finais:
+
+| Evidência | Resultado |
+| --- | --- |
+| dotnet build RetroGames.sln | Sucesso |
+| dotnet test RetroGames.sln | 33 aprovados, 0 falhas |
+| BancoCompras -- testar | INTEGRACAO DE COMPRAS: OK; respostas 401/403/400/409 esperadas; isolamento e estoque preservado |
+| npm run build | Sucesso, 109 módulos |
+| npm audit | 0 vulnerabilidades após ajuste bba35c9 |
+| Auditoria NuGet (incluindo transitivas) | Nenhum pacote vulnerável informado |
+| .env | Ignorado pelo Git, não listado entre arquivos versionados na verificação local |
+| Interface desktop e mobile | Funcionamento confirmado pelo estudante |
+
+A validação de compras usa uma nova conta fictícia e preserva o pedido existente. Não confirma o login da conta antiga. A compra válida foi de duas unidades do mesmo jogo; não foi registrada uma nova compra válida de dois jogos distintos. As auditorias refletem as fontes e versões da data da execução, não uma garantia absoluta de segurança.
+
+Pendências administrativas: atualizar o quadro GitHub Projects, confirmar acesso do professor, registrar responsáveis e revisão, e integrar a sprint à main. Não marcar essas etapas como concluídas sem confirmação.
