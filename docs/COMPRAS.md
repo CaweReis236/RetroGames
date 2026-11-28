@@ -42,3 +42,44 @@ Senhas e sessão não são armazenadas no localStorage; apenas o carrinho. A API
 - Testar visitante, cliente e administrador. Verificar 401/403 na API.
 - Testar 360px e 1366px. Demonstrar pelo menos cinco heurísticas: status do sistema, linguagem familiar, controle (remover/cancelar), prevenção (limite de quantidade e confirmação), reconhecimento (resumo do carrinho), mensagens de erro.
 - Atualizar o quadro compartilhado com o professor, responsáveis e situação real; registrar revisão da sprint. Não marcar como aprovado o que ainda não foi testado.
+
+
+## Revisão da segurança (RS01–RS06)
+
+- RS01 e RS02: cookie HttpOnly, SameSite Strict, duas horas com renovação deslizante; conforme a especificação acadêmica, sem token antiforgery adicional. Cookie Secure obrigatório fora de Development. Sessão não é persistida no armazenamento do React.
+- RS03: FallbackPolicy exige login; cadastro e catálogo públicos declarados explicitamente; manutenção exige SomenteAdministrador. O histórico obtém o ID da sessão, não de parâmetro enviado pelo cliente.
+- RS04: PasswordHasher para cadastro e login, sem senha em resposta ou log de aplicação. Os testes de cadastro verificam hash e perfil.
+- RS05: .env local ignorado pelo Git; .env.example contém placeholders. Antes da entrega conferir arquivos versionados e histórico; não publicar a configuração real.
+- RS06: parâmetros SQL para valores de entrada, inclusive IDs e baixa de estoque. Os nomes de parâmetros de listas são gerados pelo código, não pelo cliente.
+
+A leitura do código foi realizada; a verificação dinâmica de autorização e isolamento deve ser executada no ambiente conectado. Verificar também npm audit; não executar npm audit fix --force sem avaliar impacto.
+
+## Teste de integração automatizado
+
+Com a API em execução no perfil HTTP (localhost:5080), a partir da raiz:
+
+```bash
+dotnet run --project tools/BancoCompras -- testar
+```
+
+Informe a conta de cliente que já realizou uma compra. A ferramenta solicita a senha sem eco, usa dois clientes HTTP independentes, cria uma conta de teste com endereço fictício e senha aleatória e verifica 401, 403, 400/3, 400/110, 409/106, 409/111, login automático, logout e isolamento. Compara a contagem de pedidos, itens e todos os estoques antes e depois das compras recusadas. Não efetua nova compra válida e não exclui registros. A conta fictícia criada fica no banco. Não executar junto a outras compras ou alterações de estoque. O teste unitário de transação abortada complementa a verificação real de compra recusada.
+
+## Identidade visual e heurísticas para a demonstração
+
+A identidade usa azul-marinho, âmbar, cartuchos e logotipo vetorial autoral, sem capas comerciais. Layout responsivo em Bootstrap. Validar manualmente em 360 e 1366 px.
+
+| Heurística | Onde demonstrar |
+| --- | --- |
+| Visibilidade de status | Contador do carrinho, carregamento, pedido confirmado e situação Pendente |
+| Correspondência com o mundo real | Valores em reais, data brasileira, disponibilidade |
+| Controle e liberdade | Remover item, voltar ao catálogo, cancelar confirmação |
+| Consistência | Botões de ação, cores e identidade compartilhada |
+| Prevenção de erro | Quantidade de 1 a 10, bloqueio de produto esgotado e confirmação do pedido |
+| Reconhecimento | Filtros, resumo do carrinho e gêneros exibidos |
+| Recuperação de erros | Mensagem de estoque insuficiente, carrinho preservado |
+
+## Revisão da sprint — registro de evidências
+
+Confirmado pelo estudante em 27/11: Aulas 8 e 9, 33 testes unitários, cadastro, carrinho persistente, compra de duas unidades de Vector Search e histórico. Banco conferido em 28/11: um pedido, um item e estoque 8 para Vector Search. Front-end anterior ao acabamento compilado em casa.
+
+Pendente de evidência: novo teste de integração, build após acabamento, revisão visual em ambas as larguras, auditoria de dependências e acesso do professor ao quadro. O merge só deve ocorrer após essas verificações. O percentual de progresso é estimativo, não substitui os critérios de aceite.

@@ -16,7 +16,7 @@ function ArteCartucho({jogo}){
 }
 export default function CardJogo({ jogo }) {
   return <article className="card h-100 jogo-card"><ArteCartucho jogo={jogo}/><div className="card-body d-flex flex-column">
-    <div className="d-flex flex-wrap justify-content-between gap-2 align-items-center"><span className="text-secondary small">{jogo.ano} · {jogo.descricaoCondicao}</span><span className={'rg-estoque '+(jogo.estoque===0?'rg-esgotado':'')}>{jogo.estoque===0?'Esgotado':jogo.estoque<=2?'Últimas unidades':'Disponível'}</span></div>
+    <div className="d-flex flex-wrap justify-content-between gap-2 align-items-center"><span className="text-secondary small">{jogo.nomePlataforma} · {jogo.ano} · {jogo.descricaoCondicao}</span><span className={'rg-estoque '+(jogo.estoque===0?'rg-esgotado':'')}>{jogo.estoque===0?'Esgotado':jogo.estoque<=2?'Últimas unidades':'Disponível'}</span></div>
     <h2 className="h5 mt-3">{jogo.nome}</h2><p className="small text-secondary">{jogo.generos.join(' · ')}</p>
     <p className="fs-4 fw-bold mt-auto">{formatarPreco(jogo.preco)}</p>
     <Link to={'/jogos/' + jogo.id} className="btn btn-primary">Ver detalhes</Link>

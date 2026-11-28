@@ -39,7 +39,7 @@ builder.Services.AddControllers(opcoes => opcoes.Filters.Add<FluentValidationFil
 
 // Gera a documentação OpenAPI.
 builder.Services.AddOpenApi();
-builder.Services.AddSessao();
+builder.Services.AddSessao(builder.Environment.IsDevelopment());
 builder.Services.AddPoliticas();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

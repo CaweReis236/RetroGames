@@ -3,14 +3,14 @@ using RetroGames.WebApi.ApiModels;
 namespace RetroGames.WebApi.Configuration;
 public static class AutenticacaoConfig
 {
-    public static IServiceCollection AddSessao(this IServiceCollection services)
+    public static IServiceCollection AddSessao(this IServiceCollection services, bool desenvolvimento = false)
     {
         services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(o =>
         {
             o.Cookie.Name = "retrogames.sessao";
             o.Cookie.HttpOnly = true;
             o.Cookie.SameSite = SameSiteMode.Strict;
-            o.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+            o.Cookie.SecurePolicy = desenvolvimento ? CookieSecurePolicy.SameAsRequest : CookieSecurePolicy.Always;
             o.ExpireTimeSpan = TimeSpan.FromHours(2);
             o.SlidingExpiration = true;
             o.Events.OnRedirectToLogin = c => Responder(c.Response, 401, ResponseCodes.NAO_AUTENTICADO);
