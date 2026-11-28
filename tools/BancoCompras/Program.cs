@@ -2,9 +2,9 @@ using MySqlConnector;
 
 // Ferramenta administrativa local, separada da API e dos Services.
 // Não imprime a string de conexão, e nunca recria tabelas existentes.
-if (args.Length != 1 || args[0] is not ("preparar" or "verificar"))
+if (args.Length != 1 || args[0] is not ("preparar" or "verificar" or "testar"))
 {
-    Console.Error.WriteLine("Uso: dotnet run --project tools/BancoCompras -- preparar|verificar");
+    Console.Error.WriteLine("Uso: dotnet run --project tools/BancoCompras -- preparar|verificar|testar");
     return 1;
 }
 
@@ -21,6 +21,7 @@ try
     await using var conexao = new MySqlConnection(configuracao);
     await conexao.OpenAsync();
     Console.WriteLine("[OK] Conexão com o banco configurado.");
+    if (args[0] == "testar") return await TestesIntegracao.ExecutarAsync(conexao);
     var tabelas = new[] { "tb_perfil", "tb_usuario", "tb_jogo", "tb_situacao_pedido", "tb_pedido", "tb_item_pedido" };
     foreach (var tabela in tabelas)
     {
