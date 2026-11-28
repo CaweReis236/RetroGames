@@ -62,7 +62,7 @@ Com a API em execução no perfil HTTP (localhost:5080), a partir da raiz:
 dotnet run --project tools/BancoCompras -- testar
 ```
 
-Informe a conta de cliente que já realizou uma compra. A ferramenta solicita a senha sem eco, usa dois clientes HTTP independentes, cria uma conta de teste com endereço fictício e senha aleatória e verifica 401, 403, 400/3, 400/110, 409/106, 409/111, login automático, logout e isolamento. Compara a contagem de pedidos, itens e todos os estoques antes e depois das compras recusadas. Não efetua nova compra válida e não exclui registros. A conta fictícia criada fica no banco. Não executar junto a outras compras ou alterações de estoque. O teste unitário de transação abortada complementa a verificação real de compra recusada.
+Não é necessário informar credenciais. A ferramenta exige que haja pelo menos um pedido anterior, usa sessões HTTP independentes, cria uma conta de teste com endereço fictício e senha aleatória e verifica 401, 403, 400/3, 400/110, 409/106, 409/111, login automático, login com a senha gerada, logout e isolamento (o novo cliente não pode ver os pedidos existentes de outras contas). A autenticação da conta antiga não é exercitada neste teste. Compara a contagem de pedidos, itens e todos os estoques antes e depois das compras recusadas. Não efetua nova compra válida e não exclui registros. A conta fictícia criada fica no banco. Não executar junto a outras compras ou alterações de estoque. O teste unitário de transação abortada complementa a verificação real de compra recusada.
 
 ## Identidade visual e heurísticas para a demonstração
 
