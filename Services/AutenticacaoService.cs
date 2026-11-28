@@ -3,6 +3,8 @@ using RetroGames.Model.Model;
 using RetroGames.Model.Constantes;
 using RetroGames.Repository.Interfaces;
 using RetroGames.Services.Interfaces;
+using RetroGames.Services.Errors;
+using RetroGames.Repository.Exceptions;
 namespace RetroGames.Services;
 public class AutenticacaoService(IUsuarioRepository repositorio, IPasswordHasher<Usuario> hasher) : IAutenticacaoService
 {
@@ -12,6 +14,19 @@ public class AutenticacaoService(IUsuarioRepository repositorio, IPasswordHasher
         if (usuario is null || !usuario.Ativo) return null;
         return hasher.VerifyHashedPassword(usuario, usuario.SenhaHash, senha) == PasswordVerificationResult.Failed ? null : usuario;
     }
+    public async Task<Usuario> CadastrarAsync(string nome, string email, string senha)
+    {
+        email = email.Trim();
+        if (await repositorio.BuscarPorEmailAsync(email) is not null)
+            throw new BusinessRuleException(BusinessErrors.EMAIL_JA_CADASTRADO);
+        var usuario = new Usuario { Nome = nome.Trim(), Email = email, Ativo = true,
+            IdPerfil = PerfilIds.Cliente, DataCadastro = DateTime.UtcNow };
+        usuario.SenhaHash = hasher.HashPassword(usuario, senha);
+        try { usuario.Id = await repositorio.InserirAsync(usuario); }
+        catch (RegistroDuplicadoException) { throw new BusinessRuleException(BusinessErrors.EMAIL_JA_CADASTRADO); }
+        return usuario;
+    }
+
     public async Task GarantirAdministradorInicialAsync(string? email, string? senha)
     {
         if (await repositorio.ExisteAdministradorAsync()) return;

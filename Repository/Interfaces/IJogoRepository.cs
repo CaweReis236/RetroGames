@@ -11,6 +11,9 @@ public interface IJogoRepository
     // Busca um jogo pelo ID.
     Task<Jogo?> BuscarPorIdAsync(int id);
 
+    Task<Jogo?> BuscarParaCompraAsync(int id);
+    Task<int> BaixarEstoqueAsync(int id, int quantidade);
+    Task<List<Jogo>> ListarPorIdsAsync(List<int> ids);
     // Insere um jogo e retorna seu ID.
     Task<int> InserirAsync(Jogo jogo);
 

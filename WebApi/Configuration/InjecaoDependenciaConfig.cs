@@ -36,6 +36,9 @@ public static class InjecaoDependenciaConfig
 
         services.AddScoped<ICondicaoJogoRepository, CondicaoJogoRepository>();
 
+        services.AddScoped<IPedidoRepository, PedidoRepository>();
+        services.AddScoped<IItemPedidoRepository, ItemPedidoRepository>();
+        services.AddScoped<ISituacaoPedidoRepository, SituacaoPedidoRepository>();
         // Agrupador dos repositórios.
         services.AddScoped<IRepositorySet, RepositorySet>();
 
@@ -51,6 +54,7 @@ public static class InjecaoDependenciaConfig
         services.AddScoped<IUsuarioAtualService, UsuarioAtualService>();
         services.AddScoped<IPlataformaService, PlataformaService>();
 
+        services.AddScoped<IPedidoService, PedidoService>();
         services.AddScoped<IJogoService, JogoService>();
 
         services.AddScoped<IGeneroService, GeneroService>();

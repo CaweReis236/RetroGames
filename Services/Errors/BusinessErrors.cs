@@ -52,4 +52,7 @@ public static class BusinessErrors
             "Um ou mais gêneros informados não existem.",
             HttpStatusCode.NotFound
         );
+    public static readonly BusinessError EMAIL_JA_CADASTRADO = new(106, "Já existe uma conta com este e-mail.", HttpStatusCode.Conflict);
+    public static readonly BusinessError JOGO_INDISPONIVEL = new(110, "Um ou mais jogos não estão disponíveis para venda.", HttpStatusCode.BadRequest);
+    public static readonly BusinessError ESTOQUE_INSUFICIENTE = new(111, "Estoque insuficiente.", HttpStatusCode.Conflict);
 }

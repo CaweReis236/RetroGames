@@ -2,6 +2,9 @@ namespace RetroGames.Repository.Interfaces;
 
 public interface IRepositorySet
 {
+    IPedidoRepository Pedido { get; }
+    IItemPedidoRepository ItemPedido { get; }
+    ISituacaoPedidoRepository SituacaoPedido { get; }
     IUsuarioRepository Usuario { get; }
     IPlataformaRepository Plataforma { get; }
 

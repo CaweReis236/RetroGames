@@ -37,16 +37,16 @@ export default function Catalogo() {
   }
   const pronto = resultado?.chave === chave && resultado?.tentativa === tentativa
   return <>
-    <section className="hero-retro p-4 p-md-5 mb-4"><p className="marca fw-bold mb-1">ESCOLHA SUA PRÓXIMA PARTIDA</p><h1 className="display-5 fw-bold">Catálogo de jogos</h1><p className="mb-0">Clássicos físicos para jogar de novo.</p></section>
-    <form className="row g-3 mb-4" key={busca} onSubmit={e => { e.preventDefault(); mudar('busca', new FormData(e.currentTarget).get('busca').trim()) }}>
-      <div className="col-12 col-md-6"><label htmlFor="busca" className="form-label">Buscar pelo nome</label><div className="input-group"><input id="busca" name="busca" className="form-control" defaultValue={busca} maxLength={150}/><button className="btn btn-primary">Buscar</button></div></div>
-      <div className="col-6 col-md-3"><label htmlFor="plataforma" className="form-label">Plataforma</label><select id="plataforma" className="form-select" value={params.get('idPlataforma') || ''} onChange={e=>mudar('idPlataforma',e.target.value)}><option value="">Todas</option>{apoio.plataformas.map(p=><option key={p.id} value={p.id}>{p.nome}</option>)}</select></div>
+    <section className="hero-retro p-4 p-md-5 mb-4"><div className="rg-hero-texto"><p className="marca fw-bold mb-2 rg-eyebrow">★  ESCOLHA SUA PRÓXIMA PARTIDA</p><h1 className="display-5 fw-bold">Catálogo de jogos</h1><p className="mb-0">Clássicos físicos para jogar de novo. Encontre sua próxima aventura.</p></div><div className="rg-hero-arte" aria-hidden="true"><svg viewBox="0 0 260 150"><rect x="24" y="13" width="212" height="119" rx="12" fill="#0d1728" stroke="#52698b" strokeWidth="4"/><rect x="39" y="26" width="182" height="84" rx="5" fill="#263d57"/><path d="M39 96l42-39 27 26 31-32 82 59H39z" fill="#5d9d98"/><circle cx="177" cy="49" r="15" fill="#ffc66d"/><path d="M100 132v7h60v-7" stroke="#ffc66d" strokeWidth="4"/><rect x="105" y="117" width="50" height="5" rx="2" fill="#ffc66d"/></svg></div></section>
+    <form className="row g-3 mb-4 rg-filtros" key={busca} onSubmit={e => { e.preventDefault(); mudar('busca', new FormData(e.currentTarget).get('busca').trim()) }}>
+      <div className="col-12 col-md-6"><label htmlFor="busca" className="form-label">Buscar pelo nome</label><div className="input-group"><input id="busca" name="busca" className="form-control" defaultValue={busca} placeholder="Ex.: Vector Search" maxLength={150}/><button className="btn btn-primary">Buscar</button></div></div>
+      <div className="col-12 col-sm-6 col-md-3"><label htmlFor="plataforma" className="form-label">Plataforma</label><select id="plataforma" className="form-select" value={params.get('idPlataforma') || ''} onChange={e=>mudar('idPlataforma',e.target.value)}><option value="">Todas</option>{apoio.plataformas.map(p=><option key={p.id} value={p.id}>{p.nome}</option>)}</select></div>
       <div className="col-6 col-md-3"><label htmlFor="genero" className="form-label">Gênero</label><select id="genero" className="form-select" value={params.get('idGenero') || ''} onChange={e=>mudar('idGenero',e.target.value)}><option value="">Todos</option>{apoio.generos.map(g=><option key={g.id} value={g.id}>{g.nome}</option>)}</select></div>
       <div><button type="button" className="btn btn-outline-secondary" onClick={()=>setParams({})}>Limpar filtros</button></div>
     </form>
     {erroApoio && <MensagemErro mensagem={erroApoio} tentarNovamente={()=>setTentativaApoio(n=>n+1)}/>}
     {!pronto ? <Carregando/> : erro ? <MensagemErro mensagem={erro} tentarNovamente={()=>setTentativa(n=>n+1)}/> : <>
-      <p role="status">{resultado.data.totalItens} jogos encontrados</p>
+      <p className="rg-resultados" role="status">{resultado.data.totalItens} jogos encontrados</p>
       {resultado.data.itens.length === 0 ? <EstadoVazio/> : <div className="row g-3">{resultado.data.itens.map(j=><div className="col-12 col-md-6 col-lg-4" key={j.id}><CardJogo jogo={j}/></div>)}</div>}
       <Paginacao pagina={pagina} totalPaginas={resultado.data.totalPaginas} aoMudar={n=>mudar('pagina',String(n))}/>
     </>}
